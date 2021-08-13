@@ -2,6 +2,9 @@ from sklearn.model_selection import train_test_split
 from sklearn import svm
 import pandas as pd
 import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 
 def get(tf):
     ones = pd.DataFrame({'ones' : np.ones(len(tf))})
@@ -22,8 +25,11 @@ def rate(y_pre, y_test):
 
 data = pd.read_csv('heart_failure_clinical_records_dataset1.csv')
 X, y = get(data)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 4)
 model = svm.SVC(kernel = 'linear', C = 1, gamma = 2)
 model.fit(X_train, y_train)
-pre = model.predict(X_test)
-rate(pre, y_test)
+y_pre = model.predict(X_test)
+accuracy = 'accuracy : ' + str(accuracy_score(y_test, y_pre)) + '\n'
+precision = 'precision : ' + str(precision_score(y_test, y_pre)) + '\n'
+recall = 'recall : ' + str(recall_score(y_test, y_pre)) + '\n'
+print(accuracy + precision + recall)
